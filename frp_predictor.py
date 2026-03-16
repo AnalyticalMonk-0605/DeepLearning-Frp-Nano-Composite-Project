@@ -99,6 +99,30 @@ class FRPPredictor:
 
         self._model = load_model(self.model_path, compile=False)
 
+    def _nearest_row(self, nano_silica: float) -> pd.Series:
+        return self.dataset.iloc[
+            (self.dataset["Nano Silica %"] - nano_silica).abs().argsort().iloc[0]
+        ]
+
+    def _build_prediction_result(
+        self,
+        nano_silica: float,
+        tensile_mpa: float,
+        flexural_mpa: float,
+    ) -> PredictionResult:
+        dataset_min, dataset_max = self.get_feature_bounds()
+        nearest_row = self._nearest_row(nano_silica)
+        return PredictionResult(
+            nano_silica=float(nano_silica),
+            tensile_mpa=float(tensile_mpa),
+            flexural_mpa=float(flexural_mpa),
+            dataset_min=dataset_min,
+            dataset_max=dataset_max,
+            nearest_sample_nano=float(nearest_row["Nano Silica %"]),
+            nearest_sample_tensile=float(nearest_row["Tensile Stress (MPa)"]),
+            nearest_sample_flexural=float(nearest_row["Flexural Stress (MPa)"]),
+        )
+
     def predict(self, nano_silica: float) -> PredictionResult:
         self._prepare_scalers()
         self._load_model()
@@ -111,18 +135,22 @@ class FRPPredictor:
 
         prediction_scaled = self._model.predict(scaled_sequence, verbose=0)
         prediction = self._scaler_y.inverse_transform(prediction_scaled)[0]
+        return self._build_prediction_result(clamped_value, prediction[0], prediction[1])
 
-        nearest_row = self.dataset.iloc[
-            (self.dataset["Nano Silica %"] - clamped_value).abs().argsort().iloc[0]
+    def predict_many(self, nano_silica_values: list[float] | np.ndarray) -> list[PredictionResult]:
+        self._prepare_scalers()
+        self._load_model()
+
+        dataset_min, dataset_max = self.get_feature_bounds()
+        values = np.asarray(nano_silica_values, dtype=np.float32)
+        clamped = np.clip(values, dataset_min, dataset_max)
+
+        sequences = np.repeat(clamped[:, None, None], SEQUENCE_LENGTH, axis=1)
+        scaled_sequences = self._scaler_x.transform(sequences.reshape(-1, 1)).reshape(sequences.shape)
+        predictions_scaled = self._model.predict(scaled_sequences, verbose=0)
+        predictions = self._scaler_y.inverse_transform(predictions_scaled)
+
+        return [
+            self._build_prediction_result(float(nano), float(pred[0]), float(pred[1]))
+            for nano, pred in zip(clamped, predictions)
         ]
-
-        return PredictionResult(
-            nano_silica=clamped_value,
-            tensile_mpa=float(prediction[0]),
-            flexural_mpa=float(prediction[1]),
-            dataset_min=dataset_min,
-            dataset_max=dataset_max,
-            nearest_sample_nano=float(nearest_row["Nano Silica %"]),
-            nearest_sample_tensile=float(nearest_row["Tensile Stress (MPa)"]),
-            nearest_sample_flexural=float(nearest_row["Flexural Stress (MPa)"]),
-        )
