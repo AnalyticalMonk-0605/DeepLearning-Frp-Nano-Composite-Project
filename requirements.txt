@@ -5,4 +5,4 @@ streamlit
 plotly
 openpyxl
 statsmodels
-tensorflow
+tensorflow-cpu
