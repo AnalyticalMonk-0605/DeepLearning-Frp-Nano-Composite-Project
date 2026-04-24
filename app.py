@@ -203,25 +203,46 @@ def inject_styles() -> None:
             border-radius: 16px !important;
             margin-bottom: 20px !important;
         }
-        
+        [data-testid="column"] {
+            display: flex !important;
+            flex-direction: column !important;
+            }
         .metric-card {
-            padding: 18px !important;
-            border-radius: 14px !important;
+            background: #ffffff !important;
+            border: 1px solid #ddd !important;
+            
+            /* 🔥 FIX 1: Smooth rounded corners */
+            border-radius: 18px !important;
+            
+            /* 🔥 FIX 2: Equal height cards */
+            height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            
+            /* 🔥 FIX 3: Better spacing */
+            padding: 20px !important;
+            
+            /* 🔥 FIX 4: softer shadow */
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08) !important;
+
             margin: 10px 5px !important;
-            min-height: 140px !important;
-        }
+            }
         
         .metric-label {
-            margin-bottom: 8px !important;
-        }
-        
+            margin-bottom: 10px !important;
+            line-height: 1.3 !important;
+            }
+
         .metric-value {
-            margin-bottom: 8px !important;
-        }
-        
+            margin-bottom: 12px !important;
+            line-height: 1.2 !important;
+            }
+    
         .metric-foot {
-            margin-top: 6px !important;
-        }
+            margin-top: auto !important;
+            line-height: 1.4 !important;
+            }
         
         .stTabs [data-baseweb="tab-panel"] {
             padding-top: 20px !important;
