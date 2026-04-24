@@ -179,6 +179,72 @@ def inject_styles() -> None:
             font-size: 1rem !important;
             color: #222 !important;
         }
+        
+        /* ===== NEW UI SPACING & LAYOUT ===== */
+        
+        section, .panel, .glass-card, .metric-card, .note-card {
+            margin-bottom: 20px !important;
+        }
+        
+        .hero {
+            padding: 30px 35px !important;
+            border-radius: 18px !important;
+            margin-bottom: 25px !important;
+        }
+        
+        .panel {
+            padding: 25px !important;
+            border-radius: 16px !important;
+            margin-bottom: 20px !important;
+        }
+        
+        .glass-card {
+            padding: 25px !important;
+            border-radius: 16px !important;
+            margin-bottom: 20px !important;
+        }
+        
+        .metric-card {
+            padding: 18px !important;
+            border-radius: 14px !important;
+            margin: 10px 5px !important;
+            min-height: 140px !important;
+        }
+        
+        .metric-label {
+            margin-bottom: 8px !important;
+        }
+        
+        .metric-value {
+            margin-bottom: 8px !important;
+        }
+        
+        .metric-foot {
+            margin-top: 6px !important;
+        }
+        
+        .stTabs [data-baseweb="tab-panel"] {
+            padding-top: 20px !important;
+        }
+        
+        .note-card {
+            padding: 20px !important;
+            border-radius: 14px !important;
+            margin-top: 20px !important;
+        }
+        
+        .stSlider, .stNumberInput, .stSelectbox {
+            margin-bottom: 15px !important;
+        }
+        
+        .stButton {
+            margin-top: 10px !important;
+        }
+        
+        .block-container {
+            padding-top: 2rem !important;
+            padding-bottom: 2rem !important;
+        }
 
         </style>
         """,
@@ -339,7 +405,9 @@ def render_metric_cards() -> None:
     prediction = state["prediction"]
     simulation = state["simulation"]
 
-    cols = st.columns(6, gap="medium")
+    row1 = st.columns(3, gap="large")
+    row2 = st.columns(3, gap="large")
+    cols = row1 + row2
     cards = [
         (
             "Predicted Tensile",
