@@ -83,19 +83,20 @@ def inject_styles() -> None:
 
         :root {
             --sand: #f1e9dc;
-            --paper: rgba(255, 251, 245, 0.76);
-            --ink: #181613;
-            --muted: #5f5a53;
-            --line: rgba(24, 22, 19, 0.08);
+            --paper: rgba(255, 251, 245, 0.9);
+            --ink: #000000;   /* DARKER TEXT */
+            --muted: #2b2b2b; /* MORE VISIBLE */
+            --line: rgba(0, 0, 0, 0.15);
             --forest: #143f39;
             --amber: #c47a28;
             --clay: #a84a3f;
-            --mist: rgba(255, 255, 255, 0.55);
+            --mist: rgba(255, 255, 255, 0.8);
             --shadow: 0 24px 70px rgba(34, 28, 22, 0.13);
         }
 
         html, body, [class*="css"] {
             font-family: "Sora", "Segoe UI", sans-serif;
+            font-size: 16px;   /* INCREASED */
             color: var(--ink);
             background:
                 radial-gradient(circle at 15% 10%, rgba(196, 122, 40, 0.18), transparent 22%),
@@ -103,228 +104,71 @@ def inject_styles() -> None:
                 linear-gradient(180deg, #faf5ee 0%, #efe5d7 100%);
         }
 
-        .stApp {
-            background: transparent;
-        }
-
-        .block-container {
-            max-width: 1380px;
-            padding-top: 1.75rem;
-            padding-bottom: 2.5rem;
-        }
-
-        .hero {
-            position: relative;
-            overflow: hidden;
-            padding: 2.6rem 2.9rem 2.8rem 2.9rem;
-            border-radius: 32px;
-            border: 1px solid rgba(255, 255, 255, 0.72);
-            background:
-                linear-gradient(135deg, rgba(255, 248, 238, 0.92), rgba(242, 233, 220, 0.86)),
-                linear-gradient(115deg, rgba(20, 63, 57, 0.08), rgba(196, 122, 40, 0.08));
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(18px);
-        }
-
-        .hero::before {
-            content: "";
-            position: absolute;
-            right: -8%;
-            top: -20%;
-            width: 360px;
-            height: 360px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(20, 63, 57, 0.2), transparent 62%);
-            animation: pulse 10s ease-in-out infinite alternate;
-        }
-
-        .hero::after {
-            content: "";
-            position: absolute;
-            left: 54%;
-            bottom: -38%;
-            width: 420px;
-            height: 420px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(196, 122, 40, 0.17), transparent 62%);
-        }
-
-        @keyframes pulse {
-            from { transform: translateY(0px) scale(1); }
-            to { transform: translateY(16px) scale(1.08); }
-        }
-
-        .eyebrow {
-            text-transform: uppercase;
-            letter-spacing: 0.18em;
-            font-size: 0.76rem;
-            font-weight: 700;
-            color: var(--forest);
-            margin-bottom: 0.9rem;
-        }
-
         .hero-title {
-            margin: 0;
-            max-width: 900px;
-            font-family: "Cormorant Garamond", serif;
-            font-size: clamp(3rem, 5vw, 5rem);
-            line-height: 0.95;
-            font-weight: 700;
+            font-size: clamp(3.5rem, 6vw, 5.5rem); /* BIGGER */
+            color: #000;
         }
 
         .hero-copy {
-            max-width: 780px;
-            margin-top: 1rem;
-            color: var(--muted);
-            line-height: 1.7;
-            font-size: 1rem;
-        }
-
-        .hero-band {
-            display: inline-flex;
-            align-items: center;
-            margin-top: 1.2rem;
-            gap: 0.75rem;
-            padding: 0.7rem 1rem;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.45);
-            border: 1px solid rgba(255,255,255,0.7);
-            font-size: 0.88rem;
-            color: var(--muted);
-        }
-
-        .panel, .glass-card, .note-card {
-            background: var(--paper);
-            border: 1px solid rgba(255,255,255,0.72);
-            border-radius: 26px;
-            padding: 1.35rem 1.45rem;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(18px);
+            font-size: 1.2rem; /* BIGGER */
+            color: #222;
         }
 
         .panel-title {
-            text-transform: uppercase;
-            letter-spacing: 0.16em;
-            color: var(--muted);
-            font-size: 0.82rem;
-            font-weight: 700;
-            margin-bottom: 0.65rem;
-        }
-
-        .metric-card {
-            background: var(--paper);
-            border-radius: 24px;
-            padding: 1.25rem 1.35rem;
-            border: 1px solid rgba(255,255,255,0.7);
-            box-shadow: var(--shadow);
-            min-height: 168px;
+            font-size: 1rem;
+            color: #000;
         }
 
         .metric-label {
-            font-size: 0.8rem;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--muted);
+            font-size: 0.95rem;
+            color: #333;
         }
 
         .metric-value {
-            margin-top: 0.85rem;
-            font-size: clamp(1.9rem, 3vw, 3rem);
-            line-height: 1;
-            font-weight: 700;
+            font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+            color: #000;
         }
 
         .metric-foot {
-            margin-top: 0.85rem;
-            color: var(--muted);
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        .callout {
-            padding: 1.1rem 1.2rem;
-            border-radius: 20px;
-            background: rgba(255,255,255,0.6);
-            border: 1px solid var(--line);
-            color: var(--muted);
-            line-height: 1.65;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            border-radius: 999px;
-            padding: 0.42rem 0.88rem;
-            font-size: 0.8rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            font-weight: 700;
-            border: 1px solid transparent;
-        }
-
-        .badge.good {
-            color: #0b4638;
-            background: rgba(20, 63, 57, 0.12);
-            border-color: rgba(20, 63, 57, 0.16);
-        }
-
-        .badge.mid {
-            color: #8a4f08;
-            background: rgba(196, 122, 40, 0.12);
-            border-color: rgba(196, 122, 40, 0.18);
-        }
-
-        .badge.bad {
-            color: #8b3126;
-            background: rgba(168, 74, 63, 0.12);
-            border-color: rgba(168, 74, 63, 0.18);
-        }
-
-        div[data-testid="stNumberInput"],
-        div[data-testid="stSelectbox"],
-        div[data-testid="stSlider"] {
-            background: rgba(255,255,255,0.56);
-            border: 1px solid var(--line);
-            border-radius: 18px;
-            padding: 0.48rem 0.8rem 0.3rem 0.8rem;
-        }
-
-        div[data-testid="stForm"] {
-            border: none;
-        }
-
-        .stButton > button, div[data-testid="stFormSubmitButton"] > button {
-            width: 100%;
-            min-height: 3.15rem;
-            border: none;
-            border-radius: 999px;
-            background: linear-gradient(135deg, var(--forest), #0f312c);
-            color: #fffaf2;
-            font-weight: 700;
-            box-shadow: 0 16px 34px rgba(20, 63, 57, 0.22);
-        }
-
-        .stTabs [data-baseweb="tab-list"] {
-            gap: 0.65rem;
-        }
-
-        .stTabs [data-baseweb="tab"] {
-            background: rgba(255,255,255,0.42);
-            border-radius: 999px;
-            padding: 0.52rem 1rem;
-            border: 1px solid var(--line);
+            font-size: 1rem;
+            color: #2b2b2b;
         }
 
         .small-note, .footer-note {
-            color: var(--muted);
-            line-height: 1.65;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            color: #2b2b2b;
         }
+
+        /* INPUT LABELS (VERY IMPORTANT) */
+        label {
+            font-size: 1rem !important;
+            color: #000 !important;
+            font-weight: 600 !important;
+        }
+
+        input, textarea {
+            font-size: 1rem !important;
+            color: #000 !important;
+        }
+
+        .stTabs [data-baseweb="tab"] {
+            font-size: 1rem;
+            color: #000;
+        }
+
+        .stButton > button {
+            font-size: 1.05rem;
+        }
+
+        .callout {
+            font-size: 1rem;
+            color: #222;
+        }
+
         </style>
         """,
         unsafe_allow_html=True,
     )
-
 
 def render_hero(dataset: pd.DataFrame) -> None:
     min_ns = dataset["Nano Silica %"].min()
