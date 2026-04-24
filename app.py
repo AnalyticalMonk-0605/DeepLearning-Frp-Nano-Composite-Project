@@ -82,68 +82,70 @@ def inject_styles() -> None:
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap');
 
         :root {
-            --sand: #f1e9dc;
-            --paper: rgba(255, 251, 245, 0.9);
-            --ink: #000000;   /* DARKER TEXT */
-            --muted: #2b2b2b; /* MORE VISIBLE */
-            --line: rgba(0, 0, 0, 0.15);
-            --forest: #143f39;
-            --amber: #c47a28;
-            --clay: #a84a3f;
-            --mist: rgba(255, 255, 255, 0.8);
-            --shadow: 0 24px 70px rgba(34, 28, 22, 0.13);
+            --ink: #000000;
+            --muted: #1f1f1f;
         }
 
+        /* ===== GLOBAL FORCE ===== */
         html, body, [class*="css"] {
-            font-family: "Sora", "Segoe UI", sans-serif;
-            font-size: 16px;   /* INCREASED */
-            color: var(--ink);
-            background:
-                radial-gradient(circle at 15% 10%, rgba(196, 122, 40, 0.18), transparent 22%),
-                radial-gradient(circle at 82% 12%, rgba(20, 63, 57, 0.16), transparent 18%),
-                linear-gradient(180deg, #faf5ee 0%, #efe5d7 100%);
+            font-family: "Sora", sans-serif !important;
+            font-size: 16px !important;
+            color: var(--ink) !important;
         }
 
+        /* ===== HERO ===== */
         .hero-title {
-            font-size: clamp(3.5rem, 6vw, 5.5rem); /* BIGGER */
-            color: #000;
+            font-size: 3.8rem !important;
+            color: #000 !important;
         }
 
         .hero-copy {
-            font-size: 1.2rem; /* BIGGER */
-            color: #222;
+            font-size: 1.2rem !important;
+            color: #222 !important;
         }
 
+        /* ===== PANEL TITLES ===== */
         .panel-title {
-            font-size: 1rem;
-            color: #000;
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
+            color: #000 !important;
         }
 
+        /* ===== METRIC CARDS (TOP BOXES) ===== */
         .metric-label {
-            font-size: 0.95rem;
-            color: #333;
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
+            color: #000 !important;
         }
 
         .metric-value {
-            font-size: clamp(2.2rem, 3.5vw, 3.2rem);
-            color: #000;
+            font-size: 2.8rem !important;
+            font-weight: 800 !important;
+            color: #000 !important;
         }
 
         .metric-foot {
-            font-size: 1rem;
-            color: #2b2b2b;
-        }
-
-        .small-note, .footer-note {
-            font-size: 1rem;
-            color: #2b2b2b;
-        }
-
-        /* INPUT LABELS (VERY IMPORTANT) */
-        label {
             font-size: 1rem !important;
+            color: #222 !important;
+        }
+        
+        .metric-card {
+            background: #ffffff !important;
+            border: 1px solid #ddd !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+        }
+
+        /* ===== SMALL TEXT ===== */
+        .small-note, .footer-note {
+            font-size: 1rem !important;
+            color: #111 !important;
+        }
+
+        /* ===== INPUT LABELS ===== */
+        label, .stSlider label, .stNumberInput label, .stSelectbox label {
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
             color: #000 !important;
-            font-weight: 600 !important;
         }
 
         input, textarea {
@@ -151,18 +153,31 @@ def inject_styles() -> None:
             color: #000 !important;
         }
 
+        /* ===== TABS ===== */
         .stTabs [data-baseweb="tab"] {
-            font-size: 1rem;
-            color: #000;
+            font-size: 1.05rem !important;
+            font-weight: 600 !important;
+            color: #000 !important;
         }
 
+        /* ===== BUTTON ===== */
         .stButton > button {
-            font-size: 1.05rem;
-        }
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
+            }
+        .hero {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+            }
+        
+        .stTabs [aria-selected="true"] {
+            background: #143f39 !important;
+            color: white !important;
+            }
 
+        /* ===== CALLOUT ===== */
         .callout {
-            font-size: 1rem;
-            color: #222;
+            font-size: 1rem !important;
+            color: #222 !important;
         }
 
         </style>
@@ -451,9 +466,22 @@ def render_simulation_tab() -> None:
         margin=dict(l=10, r=10, t=40, b=10),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(255,255,255,0.45)",
-        font=dict(family="Sora"),
+        font=dict(
+            family="Sora",
+            size=16,
+            color="black"
+            ),
         legend=dict(orientation="h", y=1.12, x=0),
+        xaxis=dict(
+            title_font=dict(size=16, color="black"),
+            tickfont=dict(size=14, color="black")
+        ),
+        yaxis=dict(
+            title_font=dict(size=16, color="black"),
+            tickfont=dict(size=14, color="black")
+            ),
     )
+    trend.update_annotations(font=dict(size=18, color="black"))
     st.plotly_chart(trend, use_container_width=True)
 
     lower, upper = st.columns([1.05, 1], gap="large")
@@ -480,11 +508,22 @@ def render_simulation_tab() -> None:
             paper_bgcolor="rgba(0,0,0,0)",
             polar=dict(
                 bgcolor="rgba(255,255,255,0.45)",
-                radialaxis=dict(visible=True, range=[0, 100]),
-            ),
+                radialaxis=dict(
+                    visible=True,
+                    range=[0, 100],
+                    tickfont=dict(size=14, color="black")
+                    ),
+                angularaxis=dict(
+                    tickfont=dict(size=14, color="black")
+                    )
+                ),
             margin=dict(l=20, r=20, t=40, b=20),
             title="Composite Performance Envelope",
-            font=dict(family="Sora"),
+            font=dict(
+                family="Sora",
+                size=16,
+                color="black"
+                ),
         )
         st.plotly_chart(radar, use_container_width=True)
 
@@ -500,7 +539,8 @@ def render_simulation_tab() -> None:
             go.Indicator(
                 mode="gauge+number",
                 value=simulation.governing_safety_factor,
-                title={"text": "Safety Factor"},
+                title={"text": "Safety Factor","font": {"size": 16, "color": "black"}
+                       },
                 gauge={"axis": {"range": [0, 3]}, "bar": {"color": "#143f39"}, "steps": [{"range": [0, 1], "color": "#f1c7c1"}, {"range": [1, 1.35], "color": "#f1dfc4"}, {"range": [1.35, 3], "color": "#d7ece7"}]},
             ),
             row=1,
@@ -510,7 +550,8 @@ def render_simulation_tab() -> None:
             go.Indicator(
                 mode="gauge+number",
                 value=simulation.pressure_capacity_kpa,
-                title={"text": "Pressure (kPa)"},
+                title={"text": "Pressure (kPa)","font": {"size": 16, "color": "black"}
+                       },
                 gauge={"axis": {"range": [0, max(simulation.demand_pressure_kpa * 2.2, simulation.pressure_capacity_kpa * 1.2)]}, "bar": {"color": "#c47a28"}},
             ),
             row=1,
@@ -520,7 +561,8 @@ def render_simulation_tab() -> None:
             go.Indicator(
                 mode="gauge+number",
                 value=simulation.service_temperature_c,
-                title={"text": "Temp (C)"},
+                title={"text": "Temp (C)","font": {"size": 16, "color": "black"}
+                       },
                 gauge={"axis": {"range": [0, 160]}, "bar": {"color": "#a84a3f"}},
             ),
             row=2,
@@ -530,13 +572,23 @@ def render_simulation_tab() -> None:
             go.Indicator(
                 mode="gauge+number",
                 value=simulation.estimated_cost_usd,
-                title={"text": "Cost (USD)"},
+                title={"text": "Cost (USD)","font": {"size": 16, "color": "black"}
+                       },
                 gauge={"axis": {"range": [0, max(250, simulation.estimated_cost_usd * 1.35)]}, "bar": {"color": "#143f39"}},
             ),
             row=2,
             col=2,
         )
-        indicator.update_layout(height=400, margin=dict(l=10, r=10, t=20, b=10), paper_bgcolor="rgba(0,0,0,0)", font=dict(family="Sora"))
+        indicator.update_layout(
+            height=400,
+            margin=dict(l=10, r=10, t=20, b=10),
+            paper_bgcolor="rgba(0,0,0,0)",
+            font=dict(
+                family="Sora",
+                size=16,
+                color="black"
+                )
+            )   
         st.plotly_chart(indicator, use_container_width=True)
 
     st.markdown(
@@ -581,8 +633,20 @@ def render_ranking_tab() -> None:
         margin=dict(l=10, r=10, t=20, b=10),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(255,255,255,0.45)",
-        font=dict(family="Sora"),
-    )
+        font=dict(
+            family="Sora",
+            size=16,
+            color="black"
+            ),
+        xaxis=dict(
+            title_font=dict(size=16, color="black"),
+            tickfont=dict(size=14, color="black")
+            ),
+        yaxis=dict(
+            title_font=dict(size=16, color="black"),
+            tickfont=dict(size=14, color="black")
+            ),
+                )
     st.plotly_chart(bar, use_container_width=True)
     st.dataframe(ranking.round(2), use_container_width=True, hide_index=True, height=320)
 
@@ -627,7 +691,19 @@ def render_metrics_tab() -> None:
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(255,255,255,0.45)",
         coloraxis_showscale=False,
-        font=dict(family="Sora"),
+        font=dict(
+            family="Sora",
+            size=16,
+            color="black"
+            ),
+        xaxis=dict(
+            title_font=dict(size=16, color="black"),
+            tickfont=dict(size=14, color="black")
+            ),
+        yaxis=dict(
+            title_font=dict(size=16, color="black"),
+            tickfont=dict(size=14, color="black")
+            ),
     )
     st.plotly_chart(bar, use_container_width=True)
 
@@ -649,7 +725,19 @@ def render_data_tab(dataset: pd.DataFrame) -> None:
         margin=dict(l=10, r=10, t=50, b=10),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(255,255,255,0.45)",
-        font=dict(family="Sora"),
+        font=dict(
+            family="Sora",
+            size=16,
+            color="black"
+            ),
+        xaxis=dict(
+            title_font=dict(size=16, color="black"),
+            tickfont=dict(size=14, color="black")
+        ),
+        yaxis=dict(
+            title_font=dict(size=16, color="black"),
+            tickfont=dict(size=14, color="black")
+        ),
     )
     st.plotly_chart(curve, use_container_width=True)
     st.dataframe(view.round(3), use_container_width=True, hide_index=True, height=320)
