@@ -1,153 +1,100 @@
-# DeepLearning FRP Nano Composite Project
+# Deep Learning–Driven FRP Nano-Composite Estimator
 
-This repository contains the code, experiments, and results for a deep learning–based analysis of Fiber Reinforced Polymer (FRP) nano-composites, developed as part of an engineering project.
+## Project context
 
-## Project Overview
+This repository contains the source code and assets for the final year B.E. Computer Science and Engineering project:
 
-- Uses Python-based deep learning models to study or predict properties/behaviour of FRP nano-composite materials.
-- Focuses on data preprocessing, model training, evaluation, and visualization.
-- Aims to support materials research by providing a reproducible pipeline.
+“Deep Learning-Driven Prediction and Optimization of Mechanical Properties in Nano-Filler Reinforced FRP Woven Composites”.
 
-> If you want this README to exactly match your project (methods, dataset names, model types, results, contributors), please update the sections below with your specific details.
+The work was carried out at AAA College of Engineering and Technology, Sivakasi under the supervision of Dr. J. Hemalatha, M.E., Ph.D., as a bonafide academic project by:
 
-## Repository Structure
+- G Sanjay (Reg. No. 953722104045)  
+- Sutakar S J (Reg. No. 953722104051)
 
-Typical layout (may vary slightly based on your latest commits):
+This repository is intended primarily for project evaluation, academic review, and personal archival.
 
-- `data/` – Raw or processed input data (CSV, images, or other experimental data).
-- `notebooks/` – Jupyter notebooks for EDA, model prototyping, and experiments.
-- `src/` – Python source code for data loading, model definitions, training loops, and utilities.
-- `models/` – Saved model weights/checkpoints.
-- `results/` – Plots, metrics, and generated outputs.
-- `README.md` – Project documentation (this file).
+## Technical overview
 
-Adjust or refine this list based on your actual folders.
+The project develops an end-to-end software system that:
 
-## Getting Started
+- Uses a Gated Recurrent Unit (GRU) deep learning model to predict tensile and flexural stress of nano-silica reinforced glass–epoxy FRP woven composites over 0–25 wt% nano-silica.  
+- Extends the base experimental dataset to cover both the reinforcement-dominated (0–15%) and agglomeration-dominated (15–25%) regimes, capturing non-monotonic behaviour.  
+- Integrates an Application Simulation Engine that translates predicted properties into engineering metrics such as safety factors, pressure capacity, service temperature, manufacturing cost, and suitability labels for six industrial scenarios (automotive, bridge, wind, marine, drone, chemical equipment).  
+- Exposes the workflow through an interactive Streamlit web dashboard, so users can explore “what-if” scenarios without writing code.
 
-### 1. Clone the repository
+## Core components
 
-```bash
-git clone https://github.com/AnalyticalMonk-0605/DeepLearning-Frp-Nano-Composite-Project.git
-cd DeepLearning-Frp-Nano-Composite-Project
-```
+The system is organised in four conceptual layers that correspond to Python modules in this repository:
 
-### 2. Create and activate a virtual environment (optional but recommended)
+- **Data layer**  
+  - `frpfullyextended.csv`: Extended experimental dataset (nano-silica %, specimen ID, tensile stress, flexural stress).  
+  - `frprnnmodeloptimized.h5`: Trained GRU model for strength prediction.
 
-```bash
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-```
+- **Prediction layer**  
+  - `frppredictor.py`: Loads the dataset and GRU model, constructs sliding-window sequences, applies scaling, and predicts tensile and flexural stress for a user-specified nano-silica percentage.
 
-### 3. Install dependencies
+- **Simulation layer**  
+  - `advancedestimator.py`: Implements the Application Simulation Engine. From the predicted strengths plus user inputs (panel thickness, area, operating temperature, annual volume), it computes:  
+    - reliability-adjusted allowable stresses  
+    - safety factors for tensile, flexural, and pressure  
+    - pressure capacity  
+    - service temperature estimate  
+    - component mass and manufacturing cost  
+    - overall suitability score and label (Excellent, Viable, Conditional, Redesign)  
+    - ranking across six application scenarios.
 
-If you have a `requirements.txt` file:
+- **Presentation layer**  
+  - `app.py`: Streamlit dashboard with tabs for scenario simulation, scenario ranking, model metrics, training data, and engineering assumptions.
 
-```bash
-pip install -r requirements.txt
-```
+Auxiliary scripts such as `rnnupdated1525percent.py` (training) and `modelevaluate.py` (offline evaluation) reproduce model training and validation workflows.
 
-If you use `environment.yml` (conda):
+## Model and performance
 
-```bash
-conda env create -f environment.yml
-conda activate frp-nano
-```
+- Architecture: Two-layer GRU network (256 and 128 units) with dense layers and a 2-neuron output for tensile and flexural stress.  
+- Training: Sliding-window sequence construction, 80/20 train–test split, StandardScaler normalisation, early stopping, and learning rate reduction on plateau.  
+- Implementation: TensorFlow/Keras, up to 500 epochs with typical convergence between 150–300 epochs.  
+- Test performance (20% hold-out):  
+  - R² ≈ 0.91 (tensile) and 0.89 (flexural)  
+  - RMSE and MAE values suitable for engineering design decisions across 0–25 wt% nano-silica.
 
-Update this section to match how you actually manage dependencies.
+Detailed metrics and comparisons (actual vs predicted, residuals, regression plots) are saved in `frprnnmodelresults.xlsx` and visualised inside the Streamlit dashboard.
 
-## Data Description
+## Application Simulation Engine
 
-Briefly describe your dataset here:
+For each of the six scenarios (automotive body panel, bridge strengthening laminate, wind turbine shell skin, marine deck overlay, drone fairing/radome, chemical equipment access panel), the engine uses fixed reference parameters and:
 
-- Type of data (e.g., mechanical test data, microscopy images, simulation data)
-- Number of samples and key features
-- Any preprocessing steps (normalization, augmentation, feature engineering)
+1. Applies reliability adjustment based on distance from 15 wt% nano-silica.  
+2. Reduces raw strengths using scenario-specific utilisation factors.  
+3. Applies thickness and area corrections for panel geometry.  
+4. Calculates pressure capacity in kPa.  
+5. Computes separate safety factors for tensile, flexural, and pressure, and chooses the governing factor.  
+6. Estimates service temperature from nano-silica content and scenario environment.  
+7. Estimates manufacturing cost, including nano-silica premium, processing penalty, waste, and volume discount.  
+8. Produces a suitability score and label, and ranks all six scenarios.
 
-If the dataset is private or too large to upload, explain how someone else could obtain or simulate similar data.
+## Academic usage and citation
 
-## Model and Methods
+If this work is referenced in academic or technical contexts, please cite the base experimental work and this project appropriately.
 
-Summarize the deep learning approaches you use:
+- Nagendran M. et al., 2024 – base experimental study on nano-silica reinforced glass–epoxy FRP.  
+- G. Sanjay, S. J. Sutakar, 2026 – “Deep Learning-Driven Prediction and Optimization of Mechanical Properties in Nano-Filler Reinforced FRP Woven Composites”, B.E. Project, AAA College of Engineering and Technology, Sivakasi.
 
-- Model architectures (e.g., CNNs for images, fully connected networks for tabular data, transformers, etc.)
-- Loss functions and optimization algorithms
-- Training/validation split strategy
-- Evaluation metrics (e.g., MAE, MSE, R², accuracy)
+## License and permissions
 
-If you have multiple experiments, briefly list them (e.g., different architectures, hyperparameters, or input features) and how they are organized in the repo.
+This repository is **not** a general open-source library. It represents an academic final year project with significant original modelling, simulation, and software engineering work.
 
-## Results
+- **No free/open use**  
+  The code, datasets, trained models, and documentation in this repository must not be reused, modified, or integrated into other projects (academic, commercial, or open source) without explicit written permission from the authors.
 
-Highlight the most important outcomes:
+- **Collaboration and reuse**  
+  Any form of collaboration, reuse, derivative work, or redistribution requires prior written approval. For research, coursework, or industrial use, contact the authors and obtain consent before using any part of this repository.
 
-- Best model performance on validation/test set
-- Any comparison with baseline methods
-- Key visualizations (e.g., learning curves, predicted vs. actual plots, feature importance)
-
-You can add images or tables here once your results are finalized.
-
-## How to Run Experiments
-
-Provide typical commands or steps. For example:
-
-```bash
-# Example: run training script
-python src/train.py --config configs/experiment_1.yaml
-
-# Example: evaluate a trained model
-python src/eval.py --model_path models/best_model.pth
-```
-
-Adapt these commands to match your actual script names and arguments.
-
-## Project Motivation
-
-This project brings together materials engineering and deep learning to explore FRP nano-composites using data-driven methods. It is especially relevant for:
-
-- Students or researchers in materials science or mechanical/biomedical engineering
-- People interested in applying deep learning to scientific and experimental data
-
-You can briefly describe your academic context here (semester project, mini-project, thesis, etc.).
-
-## Future Work
-
-Possible extensions:
-
-- Collecting more data or adding new material systems
-- Trying alternative model architectures or self-supervised approaches
-- Hyperparameter optimization and model ensembling
-- Deploying the best model as an API or simple web app for predictions
-
-## Requirements and Tools
-
-Typical stack (customize as needed):
-
-- Python 3.10+
-- NumPy, pandas, matplotlib/seaborn
-- PyTorch or TensorFlow/Keras
-- scikit-learn
-- Jupyter Notebook
-
-Specify exact versions if reproducibility is important.
-
-## Contributing
-
-If you want others to collaborate:
-
-1. Fork the repository.
-2. Create a new branch for your feature or bugfix.
-3. Commit your changes with clear messages.
-4. Open a pull request describing what you changed and why.
-
-## License
-
-Add a license here (for example, MIT, Apache-2.0, or "All rights reserved") once you decide how you want others to use your code.
+See the `LICENSE` file in this repository for the full legal text.
 
 ## Contact
 
-For questions or collaboration:
+For permissions, collaboration requests, or technical questions:
 
-- Author: G Sanjay
+- Author: G Sanjay   
+- Email: sanjaygram0605@gmail.com  
 - GitHub: https://github.com/AnalyticalMonk-0605
-- Email: sanjaygram0605@gmail.com
